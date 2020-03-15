@@ -3,19 +3,19 @@
         <h1>Resources</h1>
 
         <h3>Data</h3>
-        <a href="https://www.worldometers.info/coronavirus/">WorldMeters Information</a>
+        <a href="https://www.worldometers.info/coronavirus/" target="_blank">WorldMeters Information</a>
         <br>
 
         <h3>Maps</h3>
-        <a href="https://www.nytimes.com/interactive/2020/world/coronavirus-maps.html">New York Times Map</a>
+        <a href="https://www.nytimes.com/interactive/2020/world/coronavirus-maps.html" target="_blank">New York Times Map</a>
         <br>
-        <a href="https://covid19info.live/">Covid19Info.live</a>
+        <a href="https://covid19info.live/" target="_blank">Covid19Info.live</a>
         <br>
-        <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">John Hopkins Univeristy Map</a>
+        <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6" target="_blank">John Hopkins Univeristy Map</a>
         <br>
 
         <h3>News</h3>
-        <a href="https://www.reddit.com/r/Coronavirus/">Coronavirus Subreddit</a>
+        <a href="https://www.reddit.com/r/Coronavirus/" target="_blank">Coronavirus Subreddit</a>
         <br>
 
         <h3>Prediction Tools</h3>
@@ -72,7 +72,7 @@ export default {
             doubleTime: 4,
             deathRate: 2.3,
             population: 327000000,
-            daysToCalculate: 64,
+            daysToCalculate: 90,
         }
     },
     computed: {
@@ -81,8 +81,16 @@ export default {
             let currentCases = this.startCases
             const today = new Date()
             
-            for (let i = 0; i <= this.daysToCalculate; i += 1) {
+            for (let i = Number(this.doubleTime); i <= this.daysToCalculate; i += 1) {
+                console.log(i)
                 if (i % this.doubleTime === 0) {
+                    
+                    currentCases *= 2
+
+                    if (currentCases >= this.population) {
+                        currentCases = this.population
+                    }
+
                     let currentDate = new Date(today.getTime() + (1000 * 60 * 60 * 24 * i))
                     let dateString = `${String(currentDate.getMonth() + 1)}-${String(currentDate.getDate()).padStart(2, '0')}`
                     let caseNumbePadded = Math.round(currentCases).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -90,7 +98,7 @@ export default {
                     let ventilatorShortage = (ventilatorsNeeded - this.ventilatorCount) < 0 ? 0 : (ventilatorsNeeded - this.ventilatorCount)
                     let deaths = currentCases * (this.deathRate / 100)
                     let popPercent = Math.round(currentCases / this.population * 100)
-                    
+
                     casesData.push({
                         number: caseNumbePadded,
                         dayOut: i,
@@ -100,7 +108,10 @@ export default {
                         ventilatorShortage: ventilatorShortage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                         deaths: deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
                     })
-                    currentCases *= 2
+
+                    if (currentCases >= this.population) {
+                        break
+                    }
                 }
             }
 
