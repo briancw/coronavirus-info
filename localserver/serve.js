@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const app = express()
-const frontendPort = 3000
+const frontendPort = 3007
 const bodyParser = require('body-parser')
 const fallback = require('express-history-api-fallback')
 

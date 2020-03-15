@@ -1,9 +1,9 @@
 {
     "apps": [
         {
-            "name": "tvmenu",
+            "name": "covid19",
             "script": "npm",
-            "args": "run electron"
+            "args": "run production"
         }
     ]
 }
